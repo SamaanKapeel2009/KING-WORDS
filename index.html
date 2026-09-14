@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👑 KING WORDS — English Vocabulary Trainer</title>
+<meta name="description" content="KING WORDS — أداة تفاعلية لتعلم وحفظ الكلمات الإنجليزية بالنطق والمعنى والاختبارات.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="dark">
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+  <div class="navbar__inner">
+    <button class="navbar__brand" data-nav="home" aria-label="KING WORDS — الرئيسية">
+      <span class="navbar__crown" aria-hidden="true">👑</span>
+      <span class="navbar__title">KING <span>WORDS</span></span>
+    </button>
+
+    <nav class="navbar__links" id="navLinks" aria-label="التنقل الرئيسي">
+      <button class="nav-link is-active" data-nav="home"><span aria-hidden="true">🏠</span> الرئيسية</button>
+      <button class="nav-link" data-nav="difficult"><span aria-hidden="true">⭐</span> الكلمات الصعبة</button>
+      <button class="nav-link" data-nav="sentences"><span aria-hidden="true">📌</span> الجمل الصعبة</button>
+      <button class="nav-link" data-nav="vocabulary"><span aria-hidden="true">📚</span> كلماتي</button>
+      <button class="nav-link" data-nav="quiz"><span aria-hidden="true">🔄</span> الاختبار</button>
+      <button class="nav-link" data-nav="about"><span aria-hidden="true">ℹ️</span> عن الموقع</button>
+    </nav>
+
+    <div class="navbar__actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="تبديل الوضع الليلي/النهاري" aria-pressed="false">
+        <span class="theme-toggle__icon" id="themeIcon">🌙</span>
+      </button>
+      <button class="hamburger" id="hamburger" type="button" aria-label="فتح القائمة" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MAIN ===================== -->
+<main id="main">
+
+  <!-- ---------- HOME PAGE ---------- -->
+  <section class="page is-active" id="page-home" aria-labelledby="homeHeading">
+
+    <div class="hero">
+      <p class="hero__eyebrow">👑 مدرّب المفردات الإنجليزية الشخصي</p>
+      <h1 class="hero__title" id="homeHeading">KING WORDS</h1>
+      <p class="hero__subtitle">English Vocabulary Trainer</p>
+      <p class="hero__desc">Learn English words, understand their meaning, hear their pronunciation, and remember them.</p>
+
+      <form class="search-box" id="searchForm" role="search" autocomplete="off">
+        <label for="wordInput" class="visually-hidden">Enter an English word</label>
+        <span class="search-box__icon" aria-hidden="true">🔎</span>
+        <input type="text" id="wordInput" class="search-box__input" placeholder="Enter an English word..." dir="ltr" inputmode="text" spellcheck="false">
+        <button type="submit" class="btn btn--primary search-box__btn">
+          <span aria-hidden="true">🔍</span> Analyze Word
+        </button>
+      </form>
+    </div>
+
+    <!-- Result area -->
+    <div id="resultArea" class="result-area" aria-live="polite"></div>
+
+    <!-- Dashboard -->
+    <section class="dashboard" aria-labelledby="dashboardHeading">
+      <h2 class="section-title" id="dashboardHeading">لوحة التقدم</h2>
+      <div class="dashboard__grid">
+        <div class="stat-card">
+          <span class="stat-card__icon" aria-hidden="true">📚</span>
+          <span class="stat-card__value" id="statLearned">0</span>
+          <span class="stat-card__label">Words Learned</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__icon" aria-hidden="true">⭐</span>
+          <span class="stat-card__value" id="statDifficult">0</span>
+          <span class="stat-card__label">Difficult Words</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card__icon" aria-hidden="true">🔄</span>
+          <span class="stat-card__value" id="statQuizScore">—</span>
+          <span class="stat-card__label">Quiz Score</span>
+        </div>
+        <div class="stat-card stat-card--streak">
+          <span class="stat-card__icon" aria-hidden="true">🔥</span>
+          <span class="stat-card__value" id="statStreak">0</span>
+          <span class="stat-card__label">Day Streak</span>
+        </div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-block__row">
+          <span>Vocabulary Progress</span>
+          <span id="progressPercentLabel">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-bar__fill" id="progressBarFill"></div></div>
+      </div>
+
+      <div class="progress-block">
+        <div class="progress-block__row">
+          <span>🎯 Today's Goal</span>
+          <span id="goalLabel">0 / 10 Words</span>
+        </div>
+        <div class="progress-bar"><div class="progress-bar__fill progress-bar__fill--goal" id="goalBarFill"></div></div>
+      </div>
+    </section>
+  </section>
+
+  <!-- ---------- DIFFICULT WORDS PAGE ---------- -->
+  <section class="page" id="page-difficult" aria-labelledby="difficultHeading">
+    <h1 class="page-title" id="difficultHeading">⭐ Difficult Words</h1>
+    <p class="page-subtitle">الكلمات التي قمت بحفظها لمراجعتها لاحقًا</p>
+
+    <div class="inline-search">
+      <span aria-hidden="true">🔎</span>
+      <input type="text" id="difficultSearch" placeholder="Search saved words..." dir="ltr">
+    </div>
+
+    <div id="difficultList" class="cards-grid"></div>
+    <p class="empty-state" id="difficultEmpty" hidden>لا توجد كلمات محفوظة بعد. ابحث عن كلمة واضغط ⭐ Save Word لإضافتها هنا.</p>
+  </section>
+
+  <!-- ---------- DIFFICULT SENTENCES PAGE ---------- -->
+  <section class="page" id="page-sentences" aria-labelledby="sentencesHeading">
+    <h1 class="page-title" id="sentencesHeading">📌 Difficult Sentences</h1>
+    <p class="page-subtitle">الجمل التي قمت بحفظها مع ترجمتها لمراجعتها لاحقًا</p>
+
+    <div class="inline-search">
+      <span aria-hidden="true">🔎</span>
+      <input type="text" id="sentenceSearch" placeholder="Search saved sentences..." dir="ltr">
+    </div>
+
+    <div id="sentenceList" class="cards-grid"></div>
+    <p class="empty-state" id="sentenceEmpty" hidden>لا توجد جمل محفوظة بعد. ابحث عن كلمة واضغط ⭐ Save Sentence لإضافة جملتها هنا.</p>
+  </section>
+
+  <!-- ---------- MY VOCABULARY PAGE ---------- -->
+  <section class="page" id="page-vocabulary" aria-labelledby="vocabHeading">
+    <h1 class="page-title" id="vocabHeading">📚 My Vocabulary</h1>
+    <p class="page-subtitle">سجل جميع الكلمات التي بحثت عنها أو تعلمتها</p>
+
+    <div class="dashboard__grid dashboard__grid--compact">
+      <div class="stat-card">
+        <span class="stat-card__icon" aria-hidden="true">📚</span>
+        <span class="stat-card__value" id="vocabTotal">0</span>
+        <span class="stat-card__label">Total Words</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__icon" aria-hidden="true">⭐</span>
+        <span class="stat-card__value" id="vocabDifficult">0</span>
+        <span class="stat-card__label">Difficult Words</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__icon" aria-hidden="true">✅</span>
+        <span class="stat-card__value" id="vocabLearned">0</span>
+        <span class="stat-card__label">Learned Words</span>
+      </div>
+    </div>
+
+    <div class="vocab-toolbar" id="vocabToolbar" hidden>
+      <span class="vocab-toolbar__count" id="vocabSelectedCount">0 محددة</span>
+      <div class="vocab-toolbar__actions">
+        <button class="btn btn--icon btn--danger" id="vocabDeleteBtn" type="button">🗑 حذف</button>
+        <button class="btn btn--icon" id="vocabQuizBtn" type="button">📝 اختبار</button>
+        <button class="btn btn--icon" id="vocabParagraphBtn" type="button">📖 برجراف</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="vocab-table" id="vocabTable">
+        <thead>
+          <tr>
+            <th class="vocab-table__check-cell"><input type="checkbox" id="vocabHeadCheck" aria-label="تحديد الكل"></th>
+            <th>Word</th>
+            <th>Meaning</th>
+            <th>Pronunciation</th>
+            <th>Date Learned</th>
+            <th>Reviews</th>
+          </tr>
+        </thead>
+        <tbody id="vocabTableBody"></tbody>
+      </table>
+    </div>
+    <p class="empty-state" id="vocabEmpty" hidden>لم تبحث عن أي كلمة بعد. ابدأ من الصفحة الرئيسية 🏠</p>
+  </section>
+
+  <!-- ---------- QUIZ PAGE ---------- -->
+  <section class="page" id="page-quiz" aria-labelledby="quizHeading">
+    <h1 class="page-title" id="quizHeading">🔄 Vocabulary Quiz</h1>
+    <p class="page-subtitle">اختبر معلوماتك في الكلمات التي حفظتها</p>
+
+    <!-- v2: Weak Words — words the user has repeatedly answered wrong -->
+    <div class="quiz-card" id="weakWordsCard" hidden>
+      <h2 class="section-title" style="margin:0 0 12px">⚠️ الكلمات التي تحتاج مراجعة</h2>
+      <div id="weakWordsList" class="weak-words-list"></div>
+      <button class="btn btn--primary" id="reviewWeakWordsBtn" type="button">🔁 اختبار الكلمات الضعيفة</button>
+    </div>
+
+    <!-- Quiz intro -->
+    <div class="quiz-card" id="quizIntro">
+      <p id="quizAvailableCount" class="quiz-info"></p>
+      <button class="btn btn--primary" id="startQuizBtn">🔀 Random Quiz</button>
+    </div>
+
+    <!-- Quiz question -->
+    <div class="quiz-card" id="quizQuestion" hidden>
+      <div class="quiz-progress" id="quizProgress"></div>
+      <p class="quiz-question__prompt">🇦🇪 ما معنى هذه الكلمة؟</p>
+      <p class="quiz-question__meaning" id="quizMeaning"></p>
+
+      <form id="quizForm" autocomplete="off">
+        <label for="quizInput" class="visually-hidden">Type the English word</label>
+        <input type="text" id="quizInput" class="quiz-input" placeholder="Type the English word..." dir="ltr" spellcheck="false">
+        <button type="submit" class="btn btn--primary">Check Answer</button>
+      </form>
+
+      <div id="quizFeedback" class="quiz-feedback" hidden></div>
+      <button class="btn btn--ghost" id="quizNextBtn" hidden>Next Word →</button>
+    </div>
+
+    <!-- Quiz complete -->
+    <div class="quiz-card" id="quizComplete" hidden>
+      <h2 class="quiz-complete__title">🎉 Quiz Complete</h2>
+      <p class="quiz-complete__score" id="quizScoreText">0 / 0</p>
+      <div class="quiz-complete__stats">
+        <div><span id="quizCorrectCount">0</span><small>Correct Answers</small></div>
+        <div><span id="quizWrongCount">0</span><small>Wrong Answers</small></div>
+        <div><span id="quizAccuracy">0%</span><small>Accuracy</small></div>
+      </div>
+      <button class="btn btn--primary" id="retryQuizBtn">🔀 Play Again</button>
+    </div>
+
+    <p class="empty-state" id="quizEmpty" hidden>تحتاج إلى حفظ كلمات أولًا قبل بدء الاختبار. اذهب إلى الصفحة الرئيسية وابحث عن بعض الكلمات ⭐</p>
+
+    <!-- ================= v2: CUSTOM QUIZ PANEL =================
+         Fully separate from the simple quiz elements above. Used when
+         a quiz is launched from "My Vocabulary" (selected words) or
+         from "Review Weak Words". Reuses the same quiz-card / btn
+         classes so it looks like a native part of the page. -->
+    <div id="customQuizPanel" hidden>
+
+      <!-- Setup: difficulty + exam mode -->
+      <div class="quiz-card" id="customQuizSetup">
+        <p class="quiz-info" id="customQuizSourceLabel"></p>
+
+        <div class="quiz-setup__group">
+          <p class="quiz-setup__label">مستوى الصعوبة</p>
+          <div class="quiz-setup__options" id="difficultyOptions" role="group" aria-label="Difficulty">
+            <button type="button" class="btn btn--ghost difficulty-btn is-active" data-difficulty="easy">🟢 Easy</button>
+            <button type="button" class="btn btn--ghost difficulty-btn" data-difficulty="medium">🟡 Medium</button>
+            <button type="button" class="btn btn--ghost difficulty-btn" data-difficulty="hard">🔴 Hard</button>
+          </div>
+        </div>
+
+        <div class="quiz-setup__group">
+          <label class="quiz-setup__toggle">
+            <input type="checkbox" id="examModeToggle">
+            📝 EXAM MODE — إخفاء النتيجة حتى نهاية الاختبار
+          </label>
+        </div>
+
+        <button class="btn btn--primary" id="customQuizStartBtn" type="button">🚀 ابدأ الاختبار</button>
+      </div>
+
+      <!-- Question -->
+      <div class="quiz-card" id="customQuizQuestion" hidden>
+        <div class="quiz-progress" id="customQuizProgress"></div>
+        <p class="quiz-question__prompt" id="customQuizPrompt"></p>
+        <p class="quiz-question__meaning" id="customQuizPromptText"></p>
+        <button class="btn btn--ghost" id="customQuizReplayBtn" type="button" hidden>🔊 إعادة الاستماع</button>
+
+        <form id="customQuizForm" autocomplete="off">
+          <label for="customQuizInput" class="visually-hidden">Your answer</label>
+          <input type="text" id="customQuizInput" class="quiz-input" placeholder="Type your answer..." spellcheck="false">
+          <button type="submit" class="btn btn--primary">Check Answer</button>
+        </form>
+
+        <div id="customQuizFeedback" class="quiz-feedback" hidden></div>
+        <button class="btn btn--ghost" id="customQuizNextBtn" hidden>Next →</button>
+      </div>
+
+      <!-- Complete -->
+      <div class="quiz-card" id="customQuizComplete" hidden>
+        <h2 class="quiz-complete__title">👑 KING WORDS<br>EXAM RESULT</h2>
+        <p class="quiz-complete__score" id="customQuizScoreText">0 / 0</p>
+        <div class="quiz-complete__stats">
+          <div><span id="customQuizCorrectCount">0</span><small>Correct</small></div>
+          <div><span id="customQuizWrongCount">0</span><small>Wrong</small></div>
+          <div><span id="customQuizAccuracy">0%</span><small>Score</small></div>
+        </div>
+        <div id="customQuizReviewSection" hidden>
+          <h3 class="quiz-setup__label">⚠️ Needs Review</h3>
+          <ul class="weak-words-review-list" id="customQuizWrongList"></ul>
+          <button class="btn btn--ghost" id="reviewMistakesBtn" type="button">🔁 مراجعة الأخطاء</button>
+        </div>
+        <button class="btn btn--primary" id="customQuizRetryBtn" type="button">🔀 اختبار جديد</button>
+        <button class="btn btn--ghost" id="customQuizBackBtn" type="button">↩️ رجوع لكلماتي</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- READING / PARAGRAPH PAGE (v2) ---------- -->
+  <section class="page" id="page-reading" aria-labelledby="readingHeading">
+    <h1 class="page-title" id="readingHeading">📖 Reading Passage</h1>
+    <p class="page-subtitle">قطعة قراءة مبنية من الكلمات التي حددتها</p>
+
+    <div class="quiz-card" id="readingPassageCard" hidden>
+      <h2 class="reading-passage__title" id="readingTitle"></h2>
+      <p class="reading-passage__text" id="readingText" dir="ltr"></p>
+
+      <div class="word-card__actions">
+        <button class="btn btn--ghost" id="readingListenBtn" type="button">🔊 Listen</button>
+        <button class="btn btn--ghost" id="readingSlowBtn" type="button">🐢 Slow</button>
+        <button class="btn btn--ghost" id="readingSaveBtn" type="button">💾 Save Paragraph</button>
+      </div>
+
+      <div class="word-card__divider" aria-hidden="true"></div>
+      <div class="word-card__row">
+        <div class="word-card__label">🇦🇪 الترجمة العربية</div>
+        <div class="word-card__arabic word-card__arabic--sentence" id="readingTranslation">—</div>
+      </div>
+
+      <div class="word-card__divider" aria-hidden="true"></div>
+      <div class="quiz-setup__group">
+        <p class="quiz-setup__label">📝 اختبار فهم القطعة — عدد الأسئلة</p>
+        <div class="quiz-setup__options" id="readingQuestionCountOptions" role="group" aria-label="Number of questions">
+          <button type="button" class="btn btn--ghost qcount-btn is-active" data-count="5">5 أسئلة</button>
+          <button type="button" class="btn btn--ghost qcount-btn" data-count="10">10 أسئلة</button>
+          <button type="button" class="btn btn--ghost qcount-btn" data-count="15">15 سؤالًا</button>
+        </div>
+        <button class="btn btn--primary" id="readingStartQuizBtn" type="button">📝 اختبار القطعة</button>
+      </div>
+    </div>
+
+    <!-- Comprehension question -->
+    <div class="quiz-card" id="readingQuizQuestion" hidden>
+      <div class="quiz-progress" id="readingQuizProgress"></div>
+      <p class="quiz-question__meaning" id="readingQuizQuestionText"></p>
+      <div class="reading-quiz__options" id="readingQuizOptions"></div>
+      <div id="readingQuizFeedback" class="quiz-feedback" hidden></div>
+      <button class="btn btn--ghost" id="readingQuizNextBtn" hidden>Next →</button>
+    </div>
+
+    <!-- Comprehension result -->
+    <div class="quiz-card" id="readingQuizComplete" hidden>
+      <h2 class="quiz-complete__title">📖 Reading Score</h2>
+      <p class="quiz-complete__score" id="readingQuizScoreText">0 / 0</p>
+      <p class="quiz-complete__score" id="readingQuizPercentText" style="font-size:1.4rem">0%</p>
+      <div id="readingQuizReviewSection" hidden>
+        <h3 class="quiz-setup__label">مراجعة الإجابات</h3>
+        <ul class="weak-words-review-list" id="readingQuizReviewList"></ul>
+      </div>
+      <button class="btn btn--primary" id="readingBackBtn" type="button">↩️ رجوع للقطعة</button>
+    </div>
+
+    <p class="empty-state" id="readingEmpty">لم يتم إنشاء أي قطعة بعد. اذهب إلى "كلماتي" وحدد بعض الكلمات ثم اضغط 📖 برجراف.</p>
+  </section>
+
+  <!-- ---------- ABOUT PAGE ---------- -->
+  <section class="page" id="page-about" aria-labelledby="aboutHeading">
+    <h1 class="page-title" id="aboutHeading">ℹ️ About KING WORDS</h1>
+
+    <div class="about-card">
+      <p>
+        <strong>KING WORDS</strong> is a simple English vocabulary learning tool designed to help learners
+        understand English words, hear their pronunciation, save difficult words, and practice through
+        interactive quizzes.
+      </p>
+    </div>
+
+    <h2 class="section-title">👨‍💻 About the Developer</h2>
+    <div class="developer-card developer-card--large">
+      <div class="developer-card__avatar" aria-hidden="true">👑</div>
+      <div class="developer-card__info">
+        <p class="developer-card__name">سمعان قابيل <span class="developer-card__name-en">— Samaan Kapeel</span></p>
+        <p class="developer-card__role">Designer &amp; Developer</p>
+        <p class="developer-card__academy">Founder of King Academy — مؤسس أكاديمية الكينج</p>
+        <a class="developer-card__contact" href="tel:01108514164">
+          <span aria-hidden="true">📞</span> 01108514164
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__cards">
+
+      <!-- Developer Card -->
+      <div class="developer-card">
+        <div class="developer-card__avatar" aria-hidden="true">👨‍💻</div>
+        <div class="developer-card__info">
+          <p class="developer-card__eyebrow">Designed &amp; Developed by</p>
+          <p class="developer-card__name">سمعان قابيل <span class="developer-card__name-en">Samaan Kapeel</span></p>
+          <p class="developer-card__role">Designer &amp; Developer</p>
+          <a class="developer-card__contact" href="tel:01108514164">
+            <span aria-hidden="true">📞</span> 01108514164
+          </a>
+        </div>
+      </div>
+
+      <!-- Academy Card -->
+      <div class="academy-card">
+        <div class="academy-card__badge" aria-hidden="true">👑</div>
+        <div class="academy-card__info">
+          <p class="academy-card__eyebrow">KING ACADEMY</p>
+          <p class="academy-card__title">أكاديمية الكينج</p>
+          <p class="academy-card__desc">منصة لتعلم البرمجة وعلوم الحاسوب</p>
+          <a class="academy-card__cta" href="https://samaankapeel2009.github.io/King/" target="_blank" rel="noopener noreferrer">
+            🚀 زيارة الأكاديمية
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <p class="footer__copy">© 2026 King Academy — Samaan Kapeel</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/storage.js"></script>
+<script src="js/api.js"></script>
+<script src="js/speech.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/app.js"></script>
+<script src="js/study.js"></script>
+</body>
+</html>
